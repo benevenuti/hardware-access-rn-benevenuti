@@ -1,8 +1,79 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { ImageBackground, PermissionsAndroid, Platform, StyleSheet, Text, View } from 'react-native';
+import { BleManager } from 'react-native-ble-plx';
+import { requestLocationPermission } from './ask_ble';
 
 export default class BluePage extends React.Component {
+    constructor() {
+        super();
+        this.manager = new BleManager();
+    }
+
+    componentDidMount() {
+        if (Platform.OS === 'ios') {
+            this.manager.onStateChange((state) => {
+                if (state === 'PoweredOn') {
+                    this.scanAndConnect();
+                }
+            });
+        } else {
+            this.scanAndConnect();
+        }
+    }
+
+    async scanAndConnect() {
+        const BLE_DEVICE_NAME = 'brushed';//'[LG] webOS TV UM7500PSB';
+
+        const permission1 = await requestLocationPermission(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION);
+        const permission2 = await requestLocationPermission(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+        //const permission3 = await requestLocationPermission(PermissionsAndroid.PERMISSIONS.BODY_SENSORS);
+
+        console.log('permission1', permission1);
+        console.log('permission2', permission2);
+        // console.log('permission3', permission3);
+
+        if (!permission1 || !permission2) {//} || !permission3) {
+            console.log('Permissions not given');
+            return;
+        }
+
+        this.manager.startDeviceScan(null, null, (error, device) => {
+            console.log('Scanning...');
+            //console.debug(device);
+
+            if (error) {
+                console.error(error);
+                return;
+            }
+
+            if (device) {
+                console.log(device.id, device.name);
+            } else {
+                console.error('no device');
+            }
+
+            if (device.name === BLE_DEVICE_NAME) {
+                console.warn('Connecting to device:', device.name);
+                this.manager.stopDeviceScan();
+                device.connect()
+                    .then((device) => {
+                        console.warn('Discovering services and characteristics');
+                        return device.discoverAllServicesAndCharacteristics();
+                    })
+                    .then((device) => {
+                        console.warn('Setting notifications');
+                    })
+                    .then(() => {
+                        console.warn('Listening...');
+                    }, (error) => {
+                        console.error(error.message);
+                    });
+
+            }
+        });
+    }
+
     render() {
         return (
             <View style={styles.container}>
