@@ -9,8 +9,7 @@ export default class BluePage extends React.Component {
                 <ImageBackground
                     source={require('../img/back.jpg')}
                     style={styles.bgImage}
-                    resizeMode="cover"
-                >
+                    resizeMode="cover">
                     <View style={[styles.section, styles.sectionLarge]}>
                         <Text>BluePage</Text>
                     </View>
@@ -41,10 +40,10 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 20,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     sectionLarge: {
         flex: 4,
-        justifyContent: 'space-around'
-    }
+        justifyContent: 'space-around',
+    },
 });
