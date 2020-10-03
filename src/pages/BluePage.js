@@ -2,7 +2,7 @@
 import React from 'react';
 import { ImageBackground, PermissionsAndroid, Platform, StyleSheet, Text, View } from 'react-native';
 import { BleManager } from 'react-native-ble-plx';
-import { requestLocationPermission } from './ask_ble';
+import { askPerms } from './AskPerms';
 
 export default class BluePage extends React.Component {
     constructor() {
@@ -25,9 +25,9 @@ export default class BluePage extends React.Component {
     async scanAndConnect() {
         const BLE_DEVICE_NAME = 'brushed';//'[LG] webOS TV UM7500PSB';
 
-        const permission1 = await requestLocationPermission(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION);
-        const permission2 = await requestLocationPermission(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-        //const permission3 = await requestLocationPermission(PermissionsAndroid.PERMISSIONS.BODY_SENSORS);
+        const permission1 = await askPerms(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION);
+        const permission2 = await askPerms(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+        //const permission3 = await askPerms(PermissionsAndroid.PERMISSIONS.BODY_SENSORS);
 
         console.log('permission1', permission1);
         console.log('permission2', permission2);

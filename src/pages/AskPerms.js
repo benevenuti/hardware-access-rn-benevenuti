@@ -1,6 +1,6 @@
 import {PermissionsAndroid} from 'react-native';
 
-export async function requestLocationPermission(permType) {
+export async function askPerms(permType) {
   try {
     const granted = await PermissionsAndroid.request(permType, {
       title: 'Permissão para uso de dispositivo.',

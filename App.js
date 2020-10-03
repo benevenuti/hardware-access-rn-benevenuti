@@ -1,9 +1,16 @@
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import BluePage from './src/pages/BluePage';
+import MapsPage from './src/pages/MapsPage';
 
 const AppNavigator = createStackNavigator({
-  Main: {
+  Maps: {
+    screen: MapsPage,
+    navigationOptions: {
+      headerShown: false,
+    },
+  },
+  Ble: {
     screen: BluePage,
     navigationOptions: {
       headerShown: false,
